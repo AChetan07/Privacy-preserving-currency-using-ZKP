@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stored Proofs - ZKP Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="page-header">
+            <h1>Stored Proofs</h1>
+            <a href="/" class="btn-back">Back to Payment</a>
+        </header>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <span class="stat-value">{{ proofs|length }}</span>
+                <span class="stat-label">Total Transactions</span>
+            </div>
+        </div>
+
+        <div class="table-container">
+            {% if proofs %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Amount</th>
+                        <th>Proof Hash</th>
+                        <th>Challenge</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in proofs %}
+                    <tr>
+                        <td>#{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>→ {{ row[2] }}</td>
+                        <td class="amount">₹{{ row[3] }}</td>
+                        <td class="proof-text">{{ row[4][:12] }}...</td>
+                        <td>{{ row[5] }}</td>
+                        <td class="timestamp">{{ row[7] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <div class="icon">∅</div>
+                <h3>No Transactions Yet</h3>
+                <p>Stored proofs will appear here once transactions are made.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

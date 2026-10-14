@@ -1,0 +1,108 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database View - ZKP Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="page-header">
+            <h1>Database View</h1>
+            <a href="/" class="btn-back">Back to Payment</a>
+        </header>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <span class="stat-value">2</span>
+                <span class="stat-label">Total Users</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">₹1500</span>
+                <span class="stat-label">Total Balance in System</span>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            <div class="user-card user-a">
+                <div class="user-name">
+                    <div class="user-avatar">A</div>
+                    <span>User A</span>
+                </div>
+                <div class="user-balance">₹1000</div>
+                <div class="balance-bar">
+                    <div class="balance-fill" style="width: 67%"></div>
+                </div>
+                <div class="balance-label">
+                    <span>Balance</span>
+                    <span>67% of max</span>
+                </div>
+            </div>
+
+            <div class="user-card user-b">
+                <div class="user-name">
+                    <div class="user-avatar">B</div>
+                    <span>User B</span>
+                </div>
+                <div class="user-balance">₹500</div>
+                <div class="balance-bar">
+                    <div class="balance-fill" style="width: 33%"></div>
+                </div>
+                <div class="balance-label">
+                    <span>Balance</span>
+                    <span>33% of max</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database View - ZKP Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="page-header">
+            <h1>Database View</h1>
+            <a href="/" class="btn-back">Back to Payment</a>
+        </header>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <span class="stat-value">{{ total_users }}</span>
+                <span class="stat-label">Total Users</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">₹{{ total_balance }}</span>
+                <span class="stat-label">Total Balance in System</span>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            {% for user in users %}
+            <div class="user-card user-{{ user.name|lower }}">
+                <div class="user-name">
+                    <div class="user-avatar">{{ user.name }}</div>
+                    <span>User {{ user.name }}</span>
+                </div>
+                <div class="user-balance">₹{{ user.balance }}</div>
+                <div class="balance-bar">
+                    <div class="balance-fill" style="width: {{ user.pct }}%"></div>
+                </div>
+                <div class="balance-label">
+                    <span>Balance</span>
+                    <span>{{ user.pct }}% of max</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

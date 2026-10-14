@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - ZKP Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        .failure-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .failure-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            border: 1px solid var(--border-subtle);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .failure-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #fa6464, var(--accent-amber));
+        }
+        
+        .failure-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(250, 100, 100, 0.1);
+            border: 2px solid #fa6464;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            color: #fa6464;
+        }
+        
+        .failure-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+        
+        .failure-message {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .failure-details {
+            background: rgba(250, 100, 100, 0.05);
+            border: 1px solid rgba(250, 100, 100, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .failure-details strong {
+            color: #fa6464;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, var(--accent-amber), #c4956a);
+            color: #0a0a0f;
+            box-shadow: 0 4px 15px rgba(212, 165, 116, 0.25);
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+        }
+        
+        .error-steps {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+        }
+        
+        .step-dot.error {
+            background: #fa6464;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="failure-container">
+            <div class="failure-card fade-in-up">
+                <div class="failure-icon">❌</div>
+                <h1 class="failure-title">Transaction Failed</h1>
+                <p class="failure-message">{{ title }}</p>
+                
+                <div class="failure-details">
+                    <strong>Reason:</strong> {{ message }}<br>
+                    <strong>Details:</strong> {{ details }}
+                </div>
+                
+                <div class="error-steps">
+                    <div class="step-dot error"></div>
+                    <span style="color: var(--text-secondary); font-size: 14px;">Proof Checked</span>
+                    <div class="step-dot error"></div>
+                    <span style="color: var(--text-secondary); font-size: 14px;">Validation Failed</span>
+                    <div class="step-dot error"></div>
+                    <span style="color: var(--text-secondary); font-size: 14px;">Transaction Rejected</span>
+                </div>
+                
+                <br><br>
+                
+                <a href="{{ back_url }}" class="back-btn">← Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

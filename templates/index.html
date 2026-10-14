@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZKP Payment System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="form-container fade-in-up">
+        <h2>ZKP Payment</h2>
+
+        <form action="/send" method="POST">
+            <div class="form-group">
+                <input type="text" name="sender" placeholder="Sender" list="user-list" required>
+                <datalist id="user-list">
+                    {% for u in users %}
+                    <option value="{{ u }}"></option>
+                    {% endfor %}
+                </datalist>
+            </div>
+            <div class="form-group">
+                <input type="text" name="receiver" placeholder="Receiver" list="user-list" required>
+                <datalist id="user-list">
+                    {% for u in users %}
+                    <option value="{{ u }}"></option>
+                    {% endfor %}
+                </datalist>
+            </div>
+            <div class="form-group">
+                <input type="number" name="amount" placeholder="Amount (₹)" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                Send Secure Payment
+            </button>
+        </form>
+
+        <div class="links">
+            <a href="/register">➕ Register New User</a>
+            <a href="/proofs">View Stored Proofs</a>
+            <a href="/db">View Database</a>
+            <a href="/balances">View Balances</a>
+            <a href="/comparison">Privacy Comparison</a>
+        </div>
+
+        <div class="info-box">
+            Zero-Knowledge Proof system: Transactions are verified cryptographically without revealing secrets.<br>
+            <strong>Registered Users:</strong> {{ users|join(', ') }}
+        </div>
+    </div>
+</body>
+</html>

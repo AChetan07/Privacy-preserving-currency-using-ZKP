@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Third Party Verification - ZKP Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .verify-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .verify-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.3s ease;
+        }
+        
+        .verify-card:hover {
+            border-color: var(--border-glow);
+        }
+        
+        .verify-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(20, 20, 31, 0.6);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--accent-teal);
+            transition: all 0.3s ease;
+        }
+        
+        .step-item:hover {
+            background: rgba(20, 20, 31, 0.9);
+            transform: translateX(5px);
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-teal), #3db8a8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            color: #0a0a0f;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-content strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .hash-display {
+            background: rgba(20, 20, 31, 0.8);
+            border: 1px solid rgba(94, 234, 212, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            word-break: break-all;
+            color: var(--accent-teal);
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .status-valid {
+            background: rgba(94, 234, 212, 0.15);
+            color: var(--accent-teal);
+            border: 1px solid rgba(94, 234, 212, 0.3);
+        }
+        
+        .status-invalid {
+            background: rgba(250, 100, 100, 0.15);
+            color: #fa6464;
+            border: 1px solid rgba(250, 100, 100, 0.3);
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 2s infinite;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="verify-container">
+            <header class="page-header">
+                <h1>Third Party Verification</h1>
+                <a href="/" class="btn-back">Back to Payment</a>
+            </header>
+
+            <div class="verify-card">
+                <h2 class="verify-title">Proof Verification Process</h2>
+
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <strong>Receive Proof Components</strong>
+                        The verifier receives the commitment, challenge, and response from the prover.
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <strong>Recompute Response Hash</strong>
+                        SHA-256 hash is computed using the commitment and challenge:
+                        <div class="hash-display">
+                            recomputed = SHA-256(commitment + challenge)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <strong>Compare Results</strong>
+                        The recomputed hash is compared against the provided response:
+                        <div class="hash-display">
+                            recomputed == response?
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Show error if parameters missing -->
+                {% if error %}
+                <div style="margin: 20px 0; padding: 15px; background: rgba(250, 100, 100, 0.1); border-radius: 8px; border: 1px solid rgba(250, 100, 100, 0.2);">
+                    <strong style="color: #fa6464;">Error:</strong>
+                    <p style="color: var(--text-secondary); margin-top: 5px;">{{ error }}</p>
+                </div>
+                {% endif %}
+
+                <!-- Show received values -->
+                {% if commitment %}
+                <div style="margin: 20px 0; padding: 15px; background: rgba(20, 20, 31, 0.8); border-radius: 8px;">
+                    <strong style="color: var(--accent-teal);">Received Proof Components:</strong>
+                    <div style="margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; word-break: break-all;">
+                        <strong>Commitment:</strong><br>{{ commitment }}<br><br>
+                        <strong>Challenge:</strong> {{ challenge }}<br>
+                        <strong>Response:</strong><br>{{ response }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <strong>Validate Format</strong>
+                        Verify commitment and response are valid SHA-256 hashes (64 hex characters each).
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    {% if valid %}
+                    <div class="status-badge status-valid">
+                        <span class="status-dot"></span>
+                        VALID PROOF
+                    </div>
+                    <p style="margin-top: 15px; color: rgba(255,255,255,0.8);">
+                        The proof is cryptographically valid. The transaction integrity is confirmed.
+                    </p>
+                    {% else %}
+                    <div class="status-badge status-invalid">
+                        <span class="status-dot"></span>
+                        INVALID PROOF
+                    </div>
+                    <p style="margin-top: 15px; color: rgba(255,255,255,0.8);">
+                        The proof verification failed. The transaction cannot be trusted.
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <a href="/" class="btn btn-primary">Back to Payment</a>
+                <a href="/proofs" class="btn btn-secondary">View All Proofs</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Success - ZKP Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="form-container fade-in-up">
+        <h2 style="background: linear-gradient(135deg, var(--accent-teal), var(--accent-amber)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+            User Registered Successfully
+        </h2>
+
+        <div class="info-box">
+            <strong>User:</strong> {{ name }}<br>
+            <strong>Starting Balance:</strong> ₹{{ balance }}
+        </div>
+
+        <div class="links">
+            <a href="/">← Back to Payment</a>
+            <a href="/balances">💰 View Balances</a>
+            <a href="/db">💾 View Database</a>
+        </div>
+    </div>
+</body>
+</html>
